@@ -1,56 +1,43 @@
-- block:
-    - name: install epel-release (CentOS)
-      yum:
-        name: epel-release
-        state: present
-        update_cache: yes
-      when: ansible_distribution == "CentOS"
+- name: install epel-release (CentOS)
+  yum:
+    name: epel-release
+    state: present
+    update_cache: yes
 
-    - name: install git
-      package:
-        name: git
-        state: present
-        update_cache: yes
+- name: install git
+  package:
+    name: git
+    state: present
+    update_cache: yes
   when: install_from_package_management
-  tags:
-    - install
 
 - block:
   - name: install depends package
     package:
-      name: "{{ item }}"
+      name: "{{ centos_depends_packages }}"
       state: present
       update_cache: yes
-    with_items:
-      - "@Development tools"
-      - gettext-devel
-      - openssl-devel
-      - perl-CPAN
-      - perl-devel
-      - zlib-devel
-      - unzip
 
   - name: Unarchive a source code from github
     unarchive:
       src: "https://github.com/git/git/archive/v{{ git_version }}.zip"
       dest: /tmp/
       remote_src: yes
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   - shell: "make configure"
     args:
       chdir: "/tmp/git-{{ git_version }}"
-      creates: "/usr/bin/git"
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   - shell: "./configure --prefix=/usr/local"
     args:
       chdir: "/tmp/git-{{ git_version }}"
-      creates: "/usr/bin/git"
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   - shell: "make install"
     args:
       chdir: "/tmp/git-{{ git_version }}"
-      creates: "/usr/bin/git"
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   when: not install_from_package_management
-  tags:
-    - install

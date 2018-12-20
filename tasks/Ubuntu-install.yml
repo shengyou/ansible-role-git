@@ -8,33 +8,25 @@
 - block:
   - name: install depends package
     package:
-      name: "{{ item }}"
+      name: "{{ ubuntu_depends_packages }}"
       state: present
       update_cache: yes
-    with_items:
-      - build-essential
-      - libssl-dev
-      - libcurl4-gnutls-dev
-      - libexpat1-dev
-      - gettext
-      - unzip
 
   - name: Unarchive a source code from github
     unarchive:
       src: "https://github.com/git/git/archive/v{{ git_version }}.zip"
       dest: /tmp/
       remote_src: yes
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   - shell: "make prefix=/usr/local all"
     args:
       chdir: "/tmp/git-{{ git_version }}"
-      creates: "/usr/bin/git"
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   - shell: "make prefix=/usr/local install"
     args:
       chdir: "/tmp/git-{{ git_version }}"
-      creates: "/usr/bin/git"
+      creates: "/etc/ansible_install_git_{{ git_version }}"
 
   when: not install_from_package_management
-  tags:
-    - install

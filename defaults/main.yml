@@ -2,3 +2,20 @@
 install_from_package_management: false
 
 git_version: "2.20.0"
+
+ubuntu_depends_packages:
+  - build-essential
+  - libssl-dev
+  - libcurl4-gnutls-dev
+  - libexpat1-dev
+  - gettext
+  - unzip
+
+centos_depends_packages:
+  - "@Development tools"
+  - gettext-devel
+  - openssl-devel
+  - perl-CPAN
+  - perl-devel
+  - zlib-devel
+  - unzip
