@@ -22,6 +22,7 @@
       state: present
       update_cache: yes
     with_items:
+      - "@Development tools"
       - gettext-devel
       - openssl-devel
       - perl-CPAN
