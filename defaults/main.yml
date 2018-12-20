@@ -18,6 +18,7 @@ ubuntu1804_depends_packages:
   - libexpat1-dev
   - gettext
   - unzip
+  - openssl
 
 centos_depends_packages:
   - "@Development tools"
