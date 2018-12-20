@@ -27,6 +27,7 @@
       - perl-CPAN
       - perl-devel
       - zlib-devel
+      - unzip
 
   - name: Unarchive a source code from github
     unarchive:
