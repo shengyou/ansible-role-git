@@ -2,7 +2,7 @@
 
 =========
 
-安裝 git，可選透過 apt 安裝，或 source code 安裝。
+安裝 git，可選透過 package management 安裝，或 source code 安裝。
 
 適用於
 * CentOS 6
