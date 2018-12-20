@@ -25,17 +25,20 @@
       remote_src: yes
       creates: "/etc/ansible_install_git_{{ git_version }}"
 
-  - shell: "make configure"
+  - name: "make configure"
+    shell: "make configure"
     args:
       chdir: "/tmp/git-{{ git_version }}"
       creates: "/etc/ansible_install_git_{{ git_version }}"
 
-  - shell: "./configure --prefix=/usr/local"
+  - name: "./configure --prefix=/usr/local"
+    shell: "./configure --prefix=/usr/local"
     args:
       chdir: "/tmp/git-{{ git_version }}"
       creates: "/etc/ansible_install_git_{{ git_version }}"
 
-  - shell: "make install"
+  - name: "make install"
+    shell: "make install"
     args:
       chdir: "/tmp/git-{{ git_version }}"
       creates: "/etc/ansible_install_git_{{ git_version }}"
