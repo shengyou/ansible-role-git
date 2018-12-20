@@ -11,6 +11,14 @@ ubuntu_depends_packages:
   - gettext
   - unzip
 
+ubuntu1804_depends_packages:
+  - make
+  - libghc-zlib-dev
+  - libcurl4-gnutls-dev
+  - libexpat1-dev
+  - gettext
+  - unzip
+
 centos_depends_packages:
   - "@Development tools"
   - gettext-devel

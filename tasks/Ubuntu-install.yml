@@ -11,6 +11,14 @@
       name: "{{ ubuntu_depends_packages }}"
       state: present
       update_cache: yes
+    when: ansible_distribution_version == "14.04" or ansible_distribution_version == "16.04"
+
+  - name: install depends package (Ubuntu 18.04)
+    package:
+      name: "{{ ubuntu1804_depends_packages }}"
+      state: present
+      update_cache: yes
+    when: ansible_distribution_version == "18.04"
 
   - name: Unarchive a source code from github
     unarchive:
@@ -19,12 +27,14 @@
       remote_src: yes
       creates: "/etc/ansible_install_git_{{ git_version }}"
 
-  - shell: "make prefix=/usr/local all"
+  - name: "make prefix=/usr/local all"
+    shell: "make prefix=/usr/local all"
     args:
       chdir: "/tmp/git-{{ git_version }}"
       creates: "/etc/ansible_install_git_{{ git_version }}"
 
-  - shell: "make prefix=/usr/local install"
+  - name: "make prefix=/usr/local install"
+    shell: "make prefix=/usr/local install"
     args:
       chdir: "/tmp/git-{{ git_version }}"
       creates: "/etc/ansible_install_git_{{ git_version }}"
