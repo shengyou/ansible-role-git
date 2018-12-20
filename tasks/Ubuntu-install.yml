@@ -1,0 +1,40 @@
+- name: install git (by apt)
+  package:
+    name: git
+    state: present
+    update_cache: yes
+  when: install_from_package_management
+
+- block:
+  - name: install depends package
+    package:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items:
+      - build-essential
+      - libssl-dev
+      - libcurl4-gnutls-dev
+      - libexpat1-dev
+      - gettext
+      - unzip
+
+  - name: Unarchive a source code from github
+    unarchive:
+      src: "https://github.com/git/git/archive/v{{ git_version }}.zip"
+      dest: /tmp/
+      remote_src: yes
+
+  - shell: "make prefix=/usr/local all"
+    args:
+      chdir: "/tmp/git-{{ git_version }}"
+      creates: "/usr/bin/git"
+
+  - shell: "make prefix=/usr/local install"
+    args:
+      chdir: "/tmp/git-{{ git_version }}"
+      creates: "/usr/bin/git"
+
+  when: not install_from_package_management
+  tags:
+    - install

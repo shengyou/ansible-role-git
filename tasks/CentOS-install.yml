@@ -1,0 +1,54 @@
+- block:
+    - name: install epel-release (CentOS)
+      yum:
+        name: epel-release
+        state: present
+        update_cache: yes
+      when: ansible_distribution == "CentOS"
+
+    - name: install git
+      package:
+        name: git
+        state: present
+        update_cache: yes
+  when: install_from_package_management
+  tags:
+    - install
+
+- block:
+  - name: install depends package
+    package:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items:
+      - gettext-devel
+      - openssl-devel
+      - perl-CPAN
+      - perl-devel
+      - zlib-devel
+
+  - name: Unarchive a source code from github
+    unarchive:
+      src: "https://github.com/git/git/archive/v{{ git_version }}.zip"
+      dest: /tmp/
+      remote_src: yes
+
+  - shell: "make configure"
+    args:
+      chdir: "/tmp/git-{{ git_version }}"
+      creates: "/usr/bin/git"
+
+  - shell: "./configure --prefix=/usr/local"
+    args:
+      chdir: "/tmp/git-{{ git_version }}"
+      creates: "/usr/bin/git"
+
+  - shell: "make install"
+    args:
+      chdir: "/tmp/git-{{ git_version }}"
+      creates: "/usr/bin/git"
+
+  when: not install_from_package_management
+  tags:
+    - install
